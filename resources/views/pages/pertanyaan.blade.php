@@ -16,22 +16,27 @@
       @else
         <table class="table table-bordered">
           <thead>
+            @csrf
             <tr>
               <th>No</th>
               <th>Judul</th>
               <th>Pertanyaan</th>
-              <th>Jawaban</th>
+              <th>Actions</th>
               <th>Solved</th>
               <th>Tgl Upload</th>
             </tr>
           </thead>
           <tbody>
             @foreach($questions as $key => $question)
-              <tr>
+              <tr key="Q-{{$question->id}}">
                 <td>{{$key + 1}}</td>
                 <td>{{$question->title}}</td>
                 <td>{!! $question->content !!}</td>
-                <td><a href="/jawaban/{{$question->id}}">Link</a></td>
+                <td>
+                  <a href="/pertanyaan/{{$question->id}}" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                  <a href="/pertanyaan/{{$question->id}}/edit" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                  <a href="#" onclick="deleteQuestion({{$question->id}})" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                </td>
                 <td>{{$question->solved ? 'True' : 'False'}}</td>
                 <td>{{$question->created_at}}</td>
               </tr>
@@ -42,3 +47,25 @@
     </div>
   </div>
 @endsection
+
+@push('script')
+  <script type="text/javascript">
+    function deleteQuestion(id){
+      $.ajax({
+          url: '/pertanyaan/' + id,
+          type: 'DELETE',
+          dataType: 'json',
+          data: {
+            "_token" : "{{ csrf_token() }}"
+          },
+          success: function(res){
+            $(`tr[key=Q-${id}]`).remove();
+            var rows = $('table tbody tr').length;
+            if (!rows) {
+              location.reload();
+            }
+          }
+      })
+    }
+  </script>
+@endpush

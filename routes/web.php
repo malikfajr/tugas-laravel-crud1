@@ -17,6 +17,13 @@ Route::get('/', function () {
 
 Route::get('/pertanyaan', 'PertanyaanController@index')->name('pertanyaan');
 Route::get('/pertanyaan/create', 'PertanyaanController@create');
+Route::get('/pertanyaan/{id}', 'PertanyaanController@show');
+Route::get('/pertanyaan/{id}/edit', 'PertanyaanController@edit');
+
 Route::post('/pertanyaan', 'PertanyaanController@store');
+Route::put('/pertanyaan/solved', 'PertanyaanController@solved');
+Route::put('/pertanyaan/{id}', 'PertanyaanController@update');
+Route::delete('/pertanyaan/{id}', 'PertanyaanController@delete');
+
 Route::get('/jawaban/{pertanyaan_id}', 'JawabanController@index')->name('jawaban');
 Route::post('/jawaban/{pertanyaan_id}', 'JawabanController@store');

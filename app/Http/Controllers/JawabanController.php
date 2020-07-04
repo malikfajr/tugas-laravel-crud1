@@ -8,10 +8,10 @@ use App\Models\Answer;
 
 class JawabanController extends Controller
 {
-  public function index($question_id) {
-    $question = Question::get_where($question_id);
-    $answers = Answer::get_where($question_id);
-    // dd($question);
+  public function index($id) {
+    $question = Question::findById($id);
+    $answers = Answer::findByQuestionId($id);
+
     return view('pages.jawaban')
             ->with(compact('question'))
             ->with(compact('answers'));
@@ -25,7 +25,7 @@ class JawabanController extends Controller
 
     $question = Answer::insert($data);
     if ($question) {
-      return redirect()->route('jawaban', [$question_id]);
+      return redirect("/pertanyaan/" . $question_id);
     }
   }
 }
